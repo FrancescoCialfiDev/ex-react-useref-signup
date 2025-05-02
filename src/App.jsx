@@ -1,14 +1,20 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import './App.css'
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 // Gli utenti devono iscriversi indicando le loro competenze e specializzazioni.
 
 function App() {
 
+  console.log("Refresh")
+
   let letters = "abcdefghijklmnopqrstuvwxyz".split("");
   let numbers = "0123456789".split("");
   let symbols = "!@#$%^&*()-_=+[]{}|;:'//,.<>?/`~".split("");
+
+  const fullNameRef = useRef()
+  const specializationRef = useRef()
+  const ageOfExperienceRef = useRef()
 
   const [error, setError] = useState({
     username: "",
@@ -78,7 +84,11 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    console.log(formData)
+    const fullName = fullNameRef.current.value
+    const specialization = specializationRef.current.value
+    const ageOfExperience = ageOfExperienceRef.current.value
+    setFormData(prev => ({ ...prev, fullName: fullName, specialization: specialization, ageOfExperience: ageOfExperience }))
+    console.log({ ...formData, fullName: fullName, specialization: specialization, ageOfExperience: ageOfExperience })
   }
 
   return (
@@ -88,12 +98,11 @@ function App() {
         {/*Full Name*/}
         <div className="fullName my-4">
           <input
+            ref={fullNameRef}
             required
             name="fullName"
             className="p-2 rounded-1 border-0 w-100"
             type="text"
-            value={formData.fullName}
-            onChange={handleChange}
             placeholder="Inserisci un nome"
           />
         </div>
@@ -133,7 +142,7 @@ function App() {
         {/*Specializations*/}
         <div className="specialization my-4">
           <label className="text-white p-2 rounded-1 border-0 w-100" htmlFor="specializzazione"> Inserisci un valore:
-            <select className="p-2 mx-2 rounded-2 border-0" value={formData.specialization} name="specialization" required id="specializzazione" onChange={handleChange}>
+            <select ref={specializationRef} className="p-2 mx-2 rounded-2 border-0" name="specialization" required id="specializzazione">
               <option value="" disabled>Inserisci una specializzazione</option>
               <option value="Full Stack">Full Stack</option>
               <option value="Frontend">Frontend</option>
@@ -145,12 +154,11 @@ function App() {
         {/*Age Of Experience*/}
         <div className="esperience my-4">
           <input
+            ref={ageOfExperienceRef}
             required
             name="ageOfExperience"
             className="p-2 rounded-1 border-0 w-100"
             type="number"
-            value={formData.ageOfExperience}
-            onChange={handleChange}
             placeholder="Inserisci anni di esperienza"
             min={"0"}
           />

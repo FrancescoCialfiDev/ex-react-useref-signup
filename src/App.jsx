@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import './App.css'
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 
 // Gli utenti devono iscriversi indicando le loro competenze e specializzazioni.
 
@@ -15,6 +15,11 @@ function App() {
   const fullNameRef = useRef()
   const specializationRef = useRef()
   const ageOfExperienceRef = useRef()
+  const scroll = useRef()
+
+  useEffect(() => {
+    fullNameRef.current.focus()
+  }, [])
 
   const [error, setError] = useState({
     username: "",
@@ -89,6 +94,18 @@ function App() {
     const ageOfExperience = ageOfExperienceRef.current.value
     setFormData(prev => ({ ...prev, fullName: fullName, specialization: specialization, ageOfExperience: ageOfExperience }))
     console.log({ ...formData, fullName: fullName, specialization: specialization, ageOfExperience: ageOfExperience })
+  }
+
+  function resetValue() {
+    setFormData({
+      fullName: '',
+      username: '',
+      password: '',
+      specialization: '',
+      ageOfExperience: '',
+      shortDesc: '',
+      available: false,
+    })
   }
 
   return (
@@ -190,8 +207,16 @@ function App() {
         </div>
 
         <button type="submit" className="btn btn-success">Invia</button>
+        <button type="reset" className="btn btn-danger mx-2" onClick={resetValue}>Resetta</button>
 
       </form>
+
+      <div className="freccia p-2" onClick={() => { scroll.current.scrollIntoView({ behavior: 'smooth' }) }} >
+        Freccia
+      </div>
+
+      <div ref={scroll}></div>
+
     </main >
   )
 }
